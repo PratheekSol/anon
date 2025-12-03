@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medical Intake Submission Payload (v2 - Adaptive Branching)",
+  "description": "Schema for adaptive branching medical intake form submission. Option values reference Prompt B dataset. Skin tone and eye colour removed per improved UX requirements.",
+  "type": "object",
+  "properties": {
+    "submission_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "health_categories_selected": {
+      "type": "array",
+      "description": "Categories selected in Health Areas Overview branching screen",
+      "items": {
+        "type": "string",
+        "enum": [
+          "heart",
+          "lung",
+          "neurological",
+          "gut",
+          "endocrine",
+          "blood",
+          "immune",
+          "skin",
+          "bone",
+          "infections",
+          "allergies",
+          "anaphylaxis",
+          "syndromes",
+          "mental",
+          "surgery",
+          "medications",
+          "none"
+        ]
+      }
+    },
+    "demographics": {
+      "type": "object",
+      "description": "Core demographic information (skin_tone and eye_colour removed per UX requirements)",
+      "properties": {
+        "age_group": { "type": ["string", "null"] },
+        "gender": { "type": ["string", "null"], "enum": ["Male", "Female", "Other", null] },
+        "last_period": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "Only collected if gender is Female or Other"
+        },
+        "height": {
+          "type": ["object", "null"],
+          "properties": {
+            "amount": { "type": ["number", "null"] },
+            "unit": { "type": "string", "enum": ["CM", "Inches"] }
+          }
+        },
+        "weight": {
+          "type": ["object", "null"],
+          "properties": {
+            "amount": { "type": ["number", "null"] },
+            "unit": { "type": "string", "enum": ["KG", "LBS"] }
+          }
+        },
+        "blood_type": { "type": ["string", "null"] },
+        "disability": { "type": ["boolean", "null"] },
+        "disability_types": { "type": "array", "items": { "type": "string" } },
+        "heart_rate": { "type": ["number", "null"] },
+        "systolic_bp": { "type": ["number", "null"] },
+        "oxygen_saturation": { "type": ["number", "null"] }
+      }
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Condition questions - only populated for selected health categories",
+      "properties": {
+        "heart_disease": { "type": ["boolean", "null"] },
+        "heart_disease_names": { "type": "array", "items": { "type": "string" } },
+        "lung_disease": { "type": ["boolean", "null"] },
+        "lung_disease_names": { "type": "array", "items": { "type": "string" } },
+        "neurological_disease": { "type": ["boolean", "null"] },
+        "neurological_conditions": { "type": "array", "items": { "type": "string" } },
+        "gut_problem": { "type": ["boolean", "null"] },
+        "gut_conditions": { "type": "array", "items": { "type": "string" } },
+        "liver_disease": { "type": ["boolean", "null"] },
+        "liver_disease_names": { "type": "array", "items": { "type": "string" } },
+        "endocrine_disease": { "type": ["boolean", "null"] },
+        "endocrine_conditions": { "type": "array", "items": { "type": "string" } },
+        "blood_disease": { "type": ["boolean", "null"] },
+        "blood_conditions": { "type": "array", "items": { "type": "string" } },
+        "immune_system_disease": { "type": ["boolean", "null"] },
+        "immune_conditions": { "type": "array", "items": { "type": "string" } },
+        "skin_disease": { "type": ["boolean", "null"] },
+        "skin_conditions": { "type": "array", "items": { "type": "string" } },
+        "bone_joint_disease": { "type": ["boolean", "null"] },
+        "bone_joint_conditions": { "type": "array", "items": { "type": "string" } },
+        "infection": { "type": ["boolean", "null"] },
+        "infection_conditions": { "type": "array", "items": { "type": "string" } },
+        "allergies": { "type": ["boolean", "null"] },
+        "allergy_types": { "type": "array", "items": { "type": "string" } },
+        "allergy_reactions": { "type": "array", "items": { "type": "string" } },
+        "anaphylaxis": { "type": ["boolean", "null"] },
+        "anaphylaxis_causes": { "type": "array", "items": { "type": "string" } },
+        "syndrome": { "type": ["boolean", "null"] },
+        "syndrome_names": { "type": "array", "items": { "type": "string" } },
+        "mental_illness": { "type": ["boolean", "null"] },
+        "mental_illness_conditions": { "type": "array", "items": { "type": "string" } },
+        "anaesthesia_problems": { "type": ["boolean", "null"] },
+        "anaesthesia_problem_types": { "type": "array", "items": { "type": "string" } },
+        "major_conditions": { "type": ["boolean", "null"] },
+        "urological": { "type": ["boolean", "null"] },
+        "urological_conditions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Options filtered by gender"
+        },
+        "acd_directive": { "type": ["boolean", "null"] }
+      }
+    },
+    "medications": {
+      "type": "object",
+      "description": "Medication questions - only populated if 'medications' health category selected",
+      "properties": {
+        "regular_medications": {
+          "type": ["boolean", "null"],
+          "description": "Gatekeeper question - if false, all other med fields should be null"
+        },
+        "blood_thinners": { "type": ["boolean", "null"] },
+        "blood_thinner_meds": { "type": "array", "items": { "type": "string" } },
+        "blood_pressure_meds": { "type": ["boolean", "null"] },
+        "bp_med_types": { "type": "array", "items": { "type": "string" } },
+        "heart_medications": { "type": ["boolean", "null"] },
+        "heart_med_types": { "type": "array", "items": { "type": "string" } },
+        "diabetes_meds": { "type": ["boolean", "null"] },
+        "diabetes_med_types": { "type": "array", "items": { "type": "string" } },
+        "steroid_meds": { "type": ["boolean", "null"] },
+        "steroid_med_types": { "type": "array", "items": { "type": "string" } },
+        "mental_health_meds": { "type": ["boolean", "null"] },
+        "mental_health_med_types": { "type": "array", "items": { "type": "string" } },
+        "antiepileptic_parkinsons": { "type": ["boolean", "null"] },
+        "parkinsons_meds": { "type": "array", "items": { "type": "string" } },
+        "misc_narcotic_meds": { "type": ["boolean", "null"] },
+        "misc_meds": { "type": "array", "items": { "type": "string" } },
+        "narcotic_meds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "total_questions_answered": { "type": "integer" },
+        "total_questions_skipped": { "type": "integer" },
+        "total_time_ms": { "type": "integer" },
+        "validation_errors": { "type": "array", "items": { "type": "string" } },
+        "flow_version": { "type": "string", "const": "2.0-adaptive" }
+      }
+    }
+  }
+}
